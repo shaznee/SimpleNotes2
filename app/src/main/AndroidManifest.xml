@@ -15,6 +15,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.shaznee.simplenotes2.database.notesprovider"
+            android:name=".database.NotesProvider"
+            android:exported="false" />
+
     </application>
 
 </manifest>

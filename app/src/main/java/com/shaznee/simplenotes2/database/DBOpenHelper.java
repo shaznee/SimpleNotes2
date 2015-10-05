@@ -1,11 +1,11 @@
-package com.shaznee.simplenotes2.activities.database;
+package com.shaznee.simplenotes2.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by MOHAMED on 05-Oct-15.
+ * Created by MOHAMED SHAZNEE on 05-Oct-15.
  */
 public class DBOpenHelper extends SQLiteOpenHelper {
 
@@ -19,6 +19,9 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public static final String NOTE_TEXT = "noteText";
     public static final String NOTE_CREATED = "noteCreated";
 
+    public static final String[] ALL_COLUMNS =
+            {NOTE_ID, NOTE_TEXT, NOTE_CREATED};
+
     //SQL to create table
     private static final String TABLE_CREATE =
             "CREATE TABLE " + TABLE_NOTES + " (" +
@@ -28,7 +31,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                     ")";
 
 
-    public DBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public DBOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -39,6 +42,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS" + TABLE_NOTES);
+        onCreate(db);
     }
 }
