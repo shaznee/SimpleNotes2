@@ -50,7 +50,7 @@ public class NotesProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        long id = database.insert(DBOpenHelper.TABLE_NOTES, null, values)
+        long id = database.insert(DBOpenHelper.TABLE_NOTES, null, values);
         return Uri.parse(BASE_PATH + "/" + id);
     }
 

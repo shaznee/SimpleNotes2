@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Notes II</string>
+    <string name="delete_all_notes">Delete all notes</string>
+    <string name="create_sample_data">Create sample data</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="all_deleted">All notes deleted</string>
+</resources>
