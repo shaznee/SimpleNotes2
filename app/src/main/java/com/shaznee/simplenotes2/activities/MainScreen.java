@@ -5,6 +5,7 @@ import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,18 +14,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.shaznee.simplenotes2.R;
+import com.shaznee.simplenotes2.adapters.NoteCursorAdapter;
 import com.shaznee.simplenotes2.database.DBOpenHelper;
 import com.shaznee.simplenotes2.database.NotesProvider;
 
 public class MainScreen extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = MainScreen.class.getSimpleName();
+    private static final int EDITOR_REQUEST_CODE = 1001;
 
     private CursorAdapter cursorAdapter;
 
@@ -33,10 +36,7 @@ public class MainScreen extends AppCompatActivity implements LoaderManager.Loade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
-        String[] from = {DBOpenHelper.NOTE_TEXT};
-        int[] to = {android.R.id.text1};
-        cursorAdapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_1, null, from, to, 0);
+        cursorAdapter = new NoteCursorAdapter(this, null, 0);
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setAdapter(cursorAdapter);
         getLoaderManager().initLoader(0, null, this);
@@ -119,5 +119,17 @@ public class MainScreen extends AppCompatActivity implements LoaderManager.Loade
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         cursorAdapter.swapCursor(null);
+    }
+
+    public void newNoteButtonClicked(View view){
+        Intent intent = new Intent(this, NoteEditor.class);
+        startActivityForResult(intent, EDITOR_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EDITOR_REQUEST_CODE && resultCode == RESULT_OK) {
+            restartLoader();
+        }
     }
 }

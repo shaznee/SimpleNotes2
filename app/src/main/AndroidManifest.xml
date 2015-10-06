@@ -17,10 +17,19 @@
         </activity>
 
         <provider
-            android:authorities="com.shaznee.simplenotes2.database.notesprovider"
             android:name=".database.NotesProvider"
+            android:authorities="com.shaznee.simplenotes2.database.notesprovider"
             android:exported="false" />
 
+        <activity
+            android:name=".activities.NoteEditor"
+            android:label="@string/title_activity_editor"
+            android:parentActivityName=".activities.MainScreen"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.shaznee.simplenotes2.activities.MainScreen" />
+        </activity>
     </application>
 
 </manifest>
