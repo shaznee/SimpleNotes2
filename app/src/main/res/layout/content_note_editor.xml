@@ -16,7 +16,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:inputType="textMultiLine"
+        android:hint="@string/enter_note_hint"
+        android:inputType="textMultiLine|textCapSentences"
         android:gravity="top|left">
     <requestFocus />
     </EditText>

@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,9 +26,7 @@ import com.shaznee.simplenotes2.database.NotesProvider;
 
 public class MainScreen extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = MainScreen.class.getSimpleName();
     private static final int EDITOR_REQUEST_CODE = 1001;
-
     private CursorAdapter cursorAdapter;
 
     @Override
@@ -112,7 +109,6 @@ public class MainScreen extends AppCompatActivity implements LoaderManager.Loade
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.NOTE_TEXT, noteText);
         Uri noteUri = getContentResolver().insert(NotesProvider.CONTENT_URI, values);
-        Log.d(TAG, "Inserted Note " + noteUri.getLastPathSegment());
     }
 
     @Override

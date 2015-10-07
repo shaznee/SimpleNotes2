@@ -10,4 +10,6 @@
     <string name="note_updated">Note updated</string>
     <string name="action_delete">Delete</string>
     <string name="note_deleted">Note Deleted</string>
+    <string name="note">note</string>
+    <string name="enter_note_hint">Enter note here</string>
 </resources>
