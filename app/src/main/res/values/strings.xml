@@ -7,4 +7,7 @@
     <string name="all_deleted">All notes deleted</string>
     <string name="title_activity_editor">Note Editor</string>
     <string name="new_note">New Note</string>
+    <string name="note_updated">Note updated</string>
+    <string name="action_delete">Delete</string>
+    <string name="note_deleted">Note Deleted</string>
 </resources>

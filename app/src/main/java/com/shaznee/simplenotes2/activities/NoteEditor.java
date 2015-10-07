@@ -2,6 +2,7 @@ package com.shaznee.simplenotes2.activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.shaznee.simplenotes2.R;
 import com.shaznee.simplenotes2.database.DBOpenHelper;
@@ -19,7 +21,7 @@ import com.shaznee.simplenotes2.database.NotesProvider;
 
 public class NoteEditor extends AppCompatActivity {
 
-    private String action;
+    private String action, noteFilter, oldText;
     private EditText editor;
 
     @Override
@@ -36,12 +38,24 @@ public class NoteEditor extends AppCompatActivity {
         if(uri == null) {
             action = Intent.ACTION_INSERT;
             setTitle(getString(R.string.new_note));
+        } else {
+            action = Intent.ACTION_EDIT;
+            noteFilter = DBOpenHelper.NOTE_ID + "=" + uri.getLastPathSegment();
+            Cursor cursor = getContentResolver().query(uri, DBOpenHelper.ALL_COLUMNS,
+                    noteFilter, null, null);
+            cursor.moveToFirst();
+            oldText = cursor.getString(cursor.getColumnIndex(DBOpenHelper.NOTE_TEXT));
+            editor.setText(oldText);
+            editor.requestFocus();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        if (action.equals(Intent.ACTION_EDIT)) {
+            getMenuInflater().inflate(R.menu.note_editor, menu);
+        }
+        return true;
     }
 
     @Override
@@ -49,6 +63,9 @@ public class NoteEditor extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finishEditing();
+                break;
+            case R.id.action_delete:
+                deleteNote();
                 break;
         }
         return true;
@@ -64,8 +81,32 @@ public class NoteEditor extends AppCompatActivity {
                     insertNote(newText);
                 }
                 break;
+            case Intent.ACTION_EDIT:
+                if (newText.length() == 0) {
+                    deleteNote();
+                } else if (oldText.equals(newText)) {
+                    setResult(RESULT_CANCELED);
+                } else {
+                    updateNote(newText);
+                }
+                break;
         }
         finish();
+    }
+
+    private void deleteNote() {
+        getContentResolver().delete(NotesProvider.CONTENT_URI, noteFilter, null);
+        Toast.makeText(this, R.string.note_deleted, Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    private void updateNote(String noteText) {
+        ContentValues values = new ContentValues();
+        values.put(DBOpenHelper.NOTE_TEXT, noteText);
+        getContentResolver().update(NotesProvider.CONTENT_URI, values, noteFilter, null);
+        Toast.makeText(this, R.string.note_updated, Toast.LENGTH_LONG).show();
+        setResult(RESULT_OK);
     }
 
     private void insertNote(String noteText) {
